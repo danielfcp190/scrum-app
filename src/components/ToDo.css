@@ -1,0 +1,75 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.toDoApp {
+    background-color: #c0d890;
+    width: 100vw;
+    height: 100vw;
+}
+
+.toDoForm {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    margin: 0 auto;
+    line-height: 3em;
+    padding: 1em;
+    background-color: #d8a878;
+}
+
+.radio {
+    display: inline;
+}
+
+.importanceContainer {
+    display: flex;
+    justify-content: space-around;
+    border: 3px solid black;
+    margin: 2em;
+    
+}
+
+.iContainer, .vIContainer, .eIContainer {
+    width: calc(95vw/3);
+    height: 80vw;
+}
+
+.iContainer, .vIContainer {
+    border-right: 3px dotted black;
+}
+
+.importanceContainer ul {
+    display: grid;
+    grid-template-columns: auto auto;
+}
+
+.importanceContainer li {
+    width: 13vw;
+    height: 13vw;
+    padding: 0.5vw;
+    margin: 1vw;
+    border: 3px solid black;
+    background-color: #e7e79d;
+    list-style-type: none;
+    position: relative;
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-rows: 15% 85%;
+    justify-content: space-evenly;
+    column-gap: 0.2vw;
+}
+
+#iSelect {
+    width: 10vw;
+    background-color: #78a890;
+}
+
+#removeButton {
+    width: 2vw;
+    font-size: 1em;
+    font-weight: bold;
+    background-color: #d8a878;
+}
