@@ -1,61 +1,72 @@
 import React, { useState, useEffect } from 'react'
-import './ToDo.css'
+import './ToDo.scss'
 
 export default function ToDo() {
 
-    const [todoI, setTodoI] = useState([])
-    const [todoVI, setTodoVI] = useState([])
-    const [todoEI, setTodoEI] = useState([])
+    const [toDo, setToDo] = useState([])
+    const [inProgress, setInProgress] = useState([])
+    const [done, setDone] = useState([])
 
     function handleAddAssignment(e) {
         e.preventDefault()
 
-        if (document.getElementById('toDoText').value !== '' && document.getElementById('important-radio').checked) {
-            setTodoI([...todoI, { id: Math.random() * 100, Assignment: document.querySelector('#toDoText').value }]);
+        if (document.getElementById('toDoText').value !== '' && document.getElementById('todo-radio').checked) {
+            setToDo([...toDo, { id: Math.random() * 100, Assignment: document.querySelector('#toDoText').value }]);
             document.getElementById('toDoText').value = '';
-        } else if (document.getElementById('toDoText').value !== '' && document.getElementById('veryImportant-radio').checked) {
-            setTodoVI([...todoVI, { id: Math.random() * 100, Assignment: document.querySelector('#toDoText').value }]);
+        } else if (document.getElementById('toDoText').value !== '' && document.getElementById('inProgress-radio').checked) {
+            setInProgress([...inProgress, { id: Math.random() * 100, Assignment: document.querySelector('#toDoText').value }]);
             document.getElementById('toDoText').value = '';
-        } else if (document.getElementById('toDoText').value !== '' && document.getElementById('extremelyImportant-radio').checked) {
-            setTodoEI([...todoEI, { id: Math.random() * 100, Assignment: document.querySelector('#toDoText').value }]);
+        } else if (document.getElementById('toDoText').value !== '' && document.getElementById('done-radio').checked) {
+            setDone([...done, { id: Math.random() * 100, Assignment: document.querySelector('#toDoText').value }]);
             document.getElementById('toDoText').value = '';
         }
     }
 
     function handleRemoveAssignment(id) {
-        setTodoI(todoI.filter(e => e.id !== id));
-        setTodoVI(todoVI.filter(e => e.id !== id));
-        setTodoEI(todoEI.filter(e => e.id !== id));
+        setToDo(toDo.filter(e => e.id !== id));
+        setInProgress(inProgress.filter(e => e.id !== id));
+        setDone(done.filter(e => e.id !== id));
     }
 
-    // useEffect(() => {
-    //     function handleChangeImportance (target) {
 
-    //         if (target.option.value === 'Very Important') {
-    //             setTodoVI([...todoVI, todoI)
-    //             setTodoI(todoI.filter(e => e.id !== id))
-    //         } else if (target.option.value === 'Extremely Important') {
+    function handleChangeStatus(item) {
+        
+        
 
-    //         } else {
-    //             return
-    //         }
+        if (document.getElementById('sSelect').value === 'To Do') {
+            setToDo([...toDo, { id: Math.random() * 100, Assignment: item.Assignment }])
+            
+            setInProgress(inProgress.filter(e => e.id !== item.id));
+            setDone(done.filter(e => e.id !== item.id));
+        } else if (document.getElementById('sSelect').value === 'In Progress') {
+            setInProgress([...inProgress, { id: Math.random() * 100, Assignment: item.Assignment }])
+            
+            setToDo(toDo.filter(e => e.id !== item.id));
+            setDone(done.filter(e => e.id !== item.id));
+        } else if (document.getElementById('sSelect').value === 'Done') {
+            setDone([...done, { id: Math.random() * 100, Assignment: item.Assignment }])
+            setToDo(toDo.filter(e => e.id !== item.id));
+            setInProgress(inProgress.filter(e => e.id !== item.id));
+            
+        }
+
+        
+    }
 
 
 
 
-    //     }
-
-
-    //     return () => {
-    //         cleanup
-    //     }
-    // }, [input])
 
     return (
         <div className='toDoApp'>
 
             <form className='toDoForm'>
-                <textarea id='toDoText' rows='5' cols='30' placeholder='Type your To Do assignment' maxLength='280' />
+                <textarea id='toDoText' rows='5' cols='30' placeholder='Type your Assignment' maxLength='280' />
+                <div className='radio'>
+                    <input type='radio' name='status-radio' id='todo-radio' value='To Do' /><label for='todo-radio'>To Do</label>
+                    <input type='radio' name='status-radio' id='inProgress-radio' value='In Progress' /><label for='inProgress-radio'>In Progress</label>
+                    <input type='radio' name='status-radio' id='done-radio' value='Done' /><label for='done-radio'>Done!</label>
+                </div>
                 <div className='radio'>
                     <input type='radio' name='importance-radio' id='important-radio' value='Important' /><label for='important-radio'>Important</label>
                     <input type='radio' name='importance-radio' id='veryImportant-radio' value='Very Important' /><label for='veryImportant-radio'>Very Important</label>
@@ -64,49 +75,64 @@ export default function ToDo() {
                 <button type='submit' onClick={handleAddAssignment}>Add Assignment</button>
             </form>
 
-            <div className='importanceContainer'>
-                <div className='iContainer'>
-                    <h2 className='importanceLists'>Important:</h2>
+            <div className='statusContainer'>
+                <div className='tdContainer'>
+                    <h2 className='statusLists'>To Do:</h2>
                     <ul>
-                        {todoI.map(item => (
+                        {toDo.map(item => (
                             <li key={item.id}>
-                                 <select id='iSelect' /*onChange={() => handleChangeImportance(iSelect)}*/> 
-                                    <option value='importantSelect' selected>Important</option>
+                                <select id='sSelect' onChange={() => handleChangeStatus(item)} >
+                                    <option value='To Do' selected>To Do</option>
+                                    <option value='In Progress'>In Progress</option>
+                                    <option value='Done'>Done!</option>
+                                </select>
+                                <select id='iSelect' >
+                                    <option value='importantSelect' >Important</option>
                                     <option value='veryImportantSelect'>Very Important</option>
                                     <option value='extremelyImportantSelect'>Extremely Important</option>
                                 </select>
                                 <button id='removeButton' onClick={() => handleRemoveAssignment(item.id)}>x</button>
-                                {item.Assignment}
+                                <span id='assignment' >{item.Assignment}</span>
                             </li>))}
                     </ul>
                 </div>
-                <div className='vIContainer'>
-                    <h2 className='importanceLists'>Very Important:</h2>
+                <div className='ipContainer'>
+                    <h2 className='statusLists'>In Progress:</h2>
                     <ul>
-                        {todoVI.map(item => (
+                        {inProgress.map(item => (
                             <li key={item.id}>
+                                <select id='sSelect' onChange={() => handleChangeStatus(item)} >
+                                    <option value='To Do' >To Do</option>
+                                    <option value='In Progress' selected>In Progress</option>
+                                    <option value='Done'>Done!</option>
+                                </select>
                                 <select id='iSelect'>
                                     <option value='importantSelect'>Important</option>
-                                    <option value='veryImportantSelect' selected>Very Important</option>
+                                    <option value='veryImportantSelect' >Very Important</option>
                                     <option value='extremelyImportantSelect'>Extremely Important</option>
                                 </select>
                                 <button id='removeButton' onClick={() => handleRemoveAssignment(item.id)}>x</button>
-                                {item.Assignment}
+                                <span id='assignment' >{item.Assignment}</span>
                             </li>))}
                     </ul>
                 </div>
-                <div className='eIContainer'>
-                    <h2 className='importanceLists'>Extremely Important:</h2>
+                <div className='dContainer'>
+                    <h2 className='statusLists'>Done!</h2>
                     <ul>
-                        {todoEI.map(item => (
+                        {done.map(item => (
                             <li key={item.id}>
+                                <select id='sSelect' onChange={() => handleChangeStatus(item)} >
+                                    <option value='To Do' >To Do</option>
+                                    <option value='In Progress'>In Progress</option>
+                                    <option value='Done' selected>Done!</option>
+                                </select>
                                 <select id='iSelect'>
                                     <option value='importantSelect' >Important</option>
                                     <option value='veryImportantSelect'>Very Important</option>
-                                    <option value='extremelyImportantSelect' selected>Extremely Important</option>
+                                    <option value='extremelyImportantSelect'>Extremely Important</option>
                                 </select>
                                 <button id='removeButton' onClick={() => handleRemoveAssignment(item.id)}>x</button>
-                                {item.Assignment}
+                                <span id='assignment' >{item.Assignment}</span>
                             </li>))}
                     </ul>
                 </div>
