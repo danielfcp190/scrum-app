@@ -10,16 +10,29 @@ export default function ToDo() {
     function handleAddAssignment(e) {
         e.preventDefault()
 
+        let importance = ''
+
+        if (document.getElementById('important-radio').checked === true) {
+             importance = 'Important';
+        } else if (document.getElementById('veryImportant-radio').checked === true) {
+             importance = 'Very Important';
+        } else if (document.getElementById('extremelyImportant-radio').checked === true) {
+             importance = 'Extremely Important';
+        }
+
         if (document.getElementById('toDoText').value !== '' && document.getElementById('todo-radio').checked) {
-            setToDo([...toDo, { id: Math.random() * 100, Assignment: document.querySelector('#toDoText').value }]);
+            setToDo([...toDo, { id: Math.random() * 100, Assignment: document.querySelector('#toDoText').value, Status: "To Do", Importance: importance }]);
             document.getElementById('toDoText').value = '';
         } else if (document.getElementById('toDoText').value !== '' && document.getElementById('inProgress-radio').checked) {
-            setInProgress([...inProgress, { id: Math.random() * 100, Assignment: document.querySelector('#toDoText').value }]);
+            setInProgress([...inProgress, { id: Math.random() * 100, Assignment: document.querySelector('#toDoText').value, Status: "In Progress", Importance: importance }]);
             document.getElementById('toDoText').value = '';
         } else if (document.getElementById('toDoText').value !== '' && document.getElementById('done-radio').checked) {
-            setDone([...done, { id: Math.random() * 100, Assignment: document.querySelector('#toDoText').value }]);
+            setDone([...done, { id: Math.random() * 100, Assignment: document.querySelector('#toDoText').value, Status: "Done", Importance: importance }]);
             document.getElementById('toDoText').value = '';
         }
+
+        importance = ''
+
     }
 
     function handleRemoveAssignment(id) {
@@ -30,33 +43,47 @@ export default function ToDo() {
 
 
     function handleChangeStatus(item) {
-        
-        
 
-        if (document.getElementById('sSelect').value === 'To Do') {
-            setToDo([...toDo, { id: Math.random() * 100, Assignment: item.Assignment }])
-            
-            setInProgress(inProgress.filter(e => e.id !== item.id));
-            setDone(done.filter(e => e.id !== item.id));
-        } else if (document.getElementById('sSelect').value === 'In Progress') {
-            setInProgress([...inProgress, { id: Math.random() * 100, Assignment: item.Assignment }])
-            
-            setToDo(toDo.filter(e => e.id !== item.id));
-            setDone(done.filter(e => e.id !== item.id));
-        } else if (document.getElementById('sSelect').value === 'Done') {
-            setDone([...done, { id: Math.random() * 100, Assignment: item.Assignment }])
-            setToDo(toDo.filter(e => e.id !== item.id));
-            setInProgress(inProgress.filter(e => e.id !== item.id));
-            
+        const oldStatus = item.Status;
+        const newStatus = document.getElementById(item.id).value
+        const newImportance = document.getElementById(item.id+1).value
+        const assign = item.Assignment;
+
+        if (newStatus !== oldStatus && newStatus === 'To Do') {
+
+            setToDo([...toDo, { id: Math.random() * 100, Assignment: assign, Status: newStatus, Importance: newImportance}])
+
+            if (oldStatus === "In Progress") {
+                setInProgress(inProgress.filter(e => e.id !== item.id));
+            } else if (oldStatus === "Done") {
+                setDone(done.filter(e => e.id !== item.id));
+            }
+
+        } else if (newStatus !== oldStatus && newStatus === 'In Progress') {
+
+            setInProgress([...inProgress, { id: Math.random() * 100, Assignment: assign, Status: newStatus, Importance: newImportance }])
+
+            if (oldStatus === 'To Do') {
+                setToDo(toDo.filter(e => e.id !== item.id));
+            } else if (oldStatus === 'Done') {
+                setDone(done.filter(e => e.id !== item.id));
+            }
+
+        } else if (newStatus !== oldStatus && newStatus === 'Done') {
+
+            setDone([...done, { id: Math.random() * 100, Assignment: assign, Status: newStatus, Importance: newImportance }])
+
+            if (oldStatus === 'In Progress') {
+                setInProgress(inProgress.filter(e => e.id !== item.id));
+            } else if (oldStatus === 'To Do') {
+                setToDo(toDo.filter(e => e.id !== item.id));
+            }
         }
 
-        
     }
 
-
-
-
-
+ 
+   
     return (
         <div className='toDoApp'>
 
@@ -81,15 +108,15 @@ export default function ToDo() {
                     <ul>
                         {toDo.map(item => (
                             <li key={item.id}>
-                                <select id='sSelect' onChange={() => handleChangeStatus(item)} >
-                                    <option value='To Do' selected>To Do</option>
+                                <select id={item.id} defaultValue='To Do' onChange={() => handleChangeStatus(item)} >
+                                    <option value='To Do'>To Do</option>
                                     <option value='In Progress'>In Progress</option>
                                     <option value='Done'>Done!</option>
                                 </select>
-                                <select id='iSelect' >
-                                    <option value='importantSelect' >Important</option>
-                                    <option value='veryImportantSelect'>Very Important</option>
-                                    <option value='extremelyImportantSelect'>Extremely Important</option>
+                                <select id={item.id+1} defaultValue={item.Importance} >
+                                    <option value='Important' >Important</option>
+                                    <option value='Very Important'>Very Important</option>
+                                    <option value='Extremely Important'>Extremely Important</option>
                                 </select>
                                 <button id='removeButton' onClick={() => handleRemoveAssignment(item.id)}>x</button>
                                 <span id='assignment' >{item.Assignment}</span>
@@ -101,15 +128,15 @@ export default function ToDo() {
                     <ul>
                         {inProgress.map(item => (
                             <li key={item.id}>
-                                <select id='sSelect' onChange={() => handleChangeStatus(item)} >
+                                <select id={item.id} defaultValue='In Progress' onChange={() => handleChangeStatus(item)} >
                                     <option value='To Do' >To Do</option>
-                                    <option value='In Progress' selected>In Progress</option>
+                                    <option value='In Progress'>In Progress</option>
                                     <option value='Done'>Done!</option>
                                 </select>
-                                <select id='iSelect'>
-                                    <option value='importantSelect'>Important</option>
-                                    <option value='veryImportantSelect' >Very Important</option>
-                                    <option value='extremelyImportantSelect'>Extremely Important</option>
+                                <select id={item.id+1} defaultValue={item.Importance}>
+                                    <option value='Important'>Important</option>
+                                    <option value='Very Important' >Very Important</option>
+                                    <option value='Extremely Important'>Extremely Important</option>
                                 </select>
                                 <button id='removeButton' onClick={() => handleRemoveAssignment(item.id)}>x</button>
                                 <span id='assignment' >{item.Assignment}</span>
@@ -121,15 +148,15 @@ export default function ToDo() {
                     <ul>
                         {done.map(item => (
                             <li key={item.id}>
-                                <select id='sSelect' onChange={() => handleChangeStatus(item)} >
+                                <select id={item.id} defaultValue='Done' onChange={() => handleChangeStatus(item)} >
                                     <option value='To Do' >To Do</option>
                                     <option value='In Progress'>In Progress</option>
-                                    <option value='Done' selected>Done!</option>
+                                    <option value='Done'>Done!</option>
                                 </select>
-                                <select id='iSelect'>
-                                    <option value='importantSelect' >Important</option>
-                                    <option value='veryImportantSelect'>Very Important</option>
-                                    <option value='extremelyImportantSelect'>Extremely Important</option>
+                                <select id={item.id+1} defaultValue={item.Importance}>
+                                    <option value='Important' >Important</option>
+                                    <option value='Very Important'>Very Important</option>
+                                    <option value='Extremely Important'>Extremely Important</option>
                                 </select>
                                 <button id='removeButton' onClick={() => handleRemoveAssignment(item.id)}>x</button>
                                 <span id='assignment' >{item.Assignment}</span>
@@ -142,3 +169,5 @@ export default function ToDo() {
         </div>
     )
 }
+
+
