@@ -1,0 +1,126 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.toDoApp {
+    background: linear-gradient(to bottom right, #45C270, #21CDC3);
+    width: 100%;
+    min-height: 100vw;
+    height: auto;
+}
+
+.toDoForm {
+    display: grid;
+    grid-template-columns: 50% 30%;
+    justify-content: space-around;
+    line-height: 2em;
+    padding: 1em;
+    background: linear-gradient(to bottom right, #FDC639, #FF7C60);
+}
+
+#toDoText {
+    grid-row: 1 / span 2;
+}
+
+.radio label {
+    margin-left: 0.5vw;
+    margin-right: 1.5vw;
+}
+
+#submitButton {
+    font-size: 1.5em;
+}
+
+.statusContainer {
+    display: flex;
+    justify-content: space-around;
+    border: 3px solid black;
+    margin: 1vw;
+    
+}
+
+.statusLabel {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.statusContainer h2 {
+    font-size: 1.5em;
+    margin: 0.3em;
+    padding: 0.3em;
+    border: 3px solid black;
+    border-radius: 10px;
+    background-color: #FDC639;
+}
+
+.statusContainer h3 {
+    font-size: 1.5em;
+    margin: 0.3em;
+}
+
+
+
+.backlogContainer, .tdContainer, .ipContainer, .dContainer {
+    width: 25%;
+    min-height: 100vw;
+    height: auto;
+}
+
+.backlogContainer, .tdContainer, .ipContainer {
+    border-right: 3px dotted black;
+}
+
+.statusContainer ul {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    
+}
+
+.statusContainer li {
+    margin: 5% 5% 2% -7%;
+    padding: 2% 5%;
+    min-height: 13vw;
+    max-height: 100%;
+    border: 3px solid black;
+    background-color: #e7e79d;
+    list-style-type: none;
+    word-break: break-all;
+    display: grid;
+    grid-template-columns: 43% 47% 10%;
+    grid-template-rows: 2em auto;
+    justify-content: space-around;
+    column-gap: 2.5%;
+}
+
+#assignment {
+    grid-column: 1 / span 3;
+    
+}
+
+.statusContainer select {
+    height: 1.7em;
+}
+
+
+#removeButton {
+    width: 1.5em;
+    max-width: 100%;
+    height: 1.7em;
+    font-size: 1em;
+    font-weight: bold;
+    background-color: #FF7C60;
+}
+
+
+@media only screen and (max-width: 480px){
+    .statusContainer {
+        display: flex;
+        flex-direction: row;
+        
+        
+    }
+}
