@@ -1,1 +1,1 @@
-https://scrum-app-danielfcp190.herokuapp.com/
+https://scrum-app-danielfcp190.herokuapp.com/board

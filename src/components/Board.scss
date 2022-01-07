@@ -22,6 +22,7 @@
 
 #toDoText {
     grid-row: 1 / span 2;
+    padding: 0.5vw;
 }
 
 .radio label {
@@ -114,6 +115,7 @@
     font-weight: bold;
     background-color: #FF7C60;
 }
+
 
 
 @media only screen and (max-width: 480px){

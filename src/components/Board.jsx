@@ -4,9 +4,13 @@ import './Board.scss'
 export default function Board() {
 
     const [backlog, setBacklog] = useState([])
+    const [backlogEstimation, setBacklogEstimation] = useState(0)
     const [toDo, setToDo] = useState([])
+    const [toDoEstimation, setToDoEstimation] = useState(0)
     const [inProgress, setInProgress] = useState([])
+    const [inProgressEstimation, setInProgressEstimation] = useState(0)
     const [done, setDone] = useState([])
+    const [doneEstimation, setDoneEstimation] = useState(0)
 
     function handleAddAssignment(e) {
         e.preventDefault()
@@ -42,7 +46,6 @@ export default function Board() {
         setInProgress(inProgress.filter(e => e.id !== id));
         setDone(done.filter(e => e.id !== id));
     }
-
 
     function handleChangeStatus(item) {
 
@@ -95,16 +98,14 @@ export default function Board() {
                 setToDo(toDo.filter(e => e.id !== item.id));
             } else if (oldStatus === "In Progress") {
                 setInProgress(inProgress.filter(e => e.id !== item.id));
-            } else if (oldStatus === "Backlog") {
                 setBacklog(backlog.filter(e => e.id !== item.id));
             }
         }
 
     }
 
-
-
     function handleTotalEstimation(target) {
+        
 
         let count = 0;
 
@@ -116,18 +117,43 @@ export default function Board() {
 
     }
 
+    let newBacklogEstimation = handleTotalEstimation(backlog);
+    let newToDoEstimation = handleTotalEstimation(toDo);
+    let newInProgressEstimation = handleTotalEstimation(inProgress);
+    let newDoneEstimation = handleTotalEstimation(done);
+
+    useEffect(() => {
+        setBacklogEstimation(newBacklogEstimation)
+        setToDoEstimation(newToDoEstimation)
+        setInProgressEstimation(newInProgressEstimation)
+        setDoneEstimation(newDoneEstimation)
+        
+    }, [newBacklogEstimation, newToDoEstimation, newInProgressEstimation, newDoneEstimation])
+
+
     function handleChangeEstimation(item) {
 
         const newEstimation = document.getElementById(item.id + 1).value
+       
 
-        if (item.Estimation !== newEstimation) {
+        if (backlog.indexOf(item) !== -1 && item.Estimation !== newEstimation) {
             item.Estimation = newEstimation;
-
+            setBacklogEstimation(handleTotalEstimation(backlog));
+        } else if (toDo.indexOf(item) !== -1 && item.Estimation !== newEstimation) {
+            item.Estimation = newEstimation;
+            setToDoEstimation(handleTotalEstimation(toDo));
+        } else if (inProgress.indexOf(item) !== -1 && item.Estimation !== newEstimation) {
+            item.Estimation = newEstimation;
+            setInProgressEstimation(handleTotalEstimation(inProgress));
+        } else if (done.indexOf(item) !== -1 && item.Estimation !== newEstimation) {
+            item.Estimation = newEstimation;
+            setDoneEstimation(handleTotalEstimation(done));
         }
 
-
+        console.log(backlogEstimation)
 
     }
+
 
     return (
         <div className='toDoApp'>
@@ -152,7 +178,7 @@ export default function Board() {
                 <div className='backlogContainer'>
                     <div className='statusLabel'>
                         <h2 className='statusLists'>Backlog ({backlog.length})</h2>
-                        <h3 className='totalEstimation'>{handleTotalEstimation(backlog)} pts</h3>
+                        <h3 className='totalEstimation'>{backlogEstimation} pts</h3>
                     </div>
                     <ul>
                         {backlog.map(item => (
@@ -180,7 +206,7 @@ export default function Board() {
                 <div className='tdContainer'>
                     <div className='statusLabel'>
                         <h2 className='statusLists'>To Do ({toDo.length})</h2>
-                        <h3 className='totalEstimation'>{handleTotalEstimation(toDo)} pts</h3>
+                        <h3 className='totalEstimation'>{toDoEstimation} pts</h3>
                     </div>
                     <ul>
                         {toDo.map(item => (
@@ -208,7 +234,7 @@ export default function Board() {
                 <div className='ipContainer'>
                     <div className='statusLabel'>
                         <h2 className='statusLists'>In Progress ({inProgress.length})</h2>
-                        <h3 className='totalEstimation'>{handleTotalEstimation(inProgress)} pts</h3>
+                        <h3 className='totalEstimation'>{inProgressEstimation} pts</h3>
                     </div>
                     <ul>
                         {inProgress.map(item => (
@@ -236,7 +262,7 @@ export default function Board() {
                 <div className='dContainer'>
                     <div className='statusLabel'>
                         <h2 className='statusLists'>Done! ({done.length})</h2>
-                        <h3 className='totalEstimation'>{handleTotalEstimation(done)} pts</h3>
+                        <h3 className='totalEstimation'>{doneEstimation} pts</h3>
                     </div>
                     <ul>
                         {done.map(item => (
